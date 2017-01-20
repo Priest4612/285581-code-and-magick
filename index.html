@@ -34,7 +34,7 @@
 
 <script type="text/javascript">
   var fireballSize = 22;
-  var getFireballSize = function (left) {
+  var getFireballSpeed = function (left) {
     left ? return 5 : return 2;
   }
 
@@ -47,11 +47,11 @@
   }
 
   function getWizardX (width) {
-
+    return width / 2;
   }
 
   function getWizardY (height) {
-    
+    return height * 2 / 3;
   }
 
 </script>
