@@ -26,8 +26,8 @@ window.renderStatistics = function (ctx, names, times) {
     }
 
     function randomColor() {
-      var rnd = (Math.random() * 255).toFixed(0);
-      var alpha = (0.5 + Math.random() * (1 + 0.5)).toFixed(1);
+      var rnd = ((Math.random() * 5) * 50).toFixed(0);
+      var alpha = (0.5 + Math.random() * (1 - 0.5)).toFixed(1);
       return ['rgba(0, 0, ', rnd, ', ', alpha, ')'].join('');
     }
 
