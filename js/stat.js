@@ -1,5 +1,11 @@
 'use strict';
 window.renderStatistics = function (ctx, names, times) {
+  var cloudX = 100;
+  var cloudY = 10;
+  var widthCloud = 420;
+  var heightCloud = 270;
+  var roundoffCloud = 30;
+  var offsetCloud = 10;
   var drawCloud = function (x, y, width, height, roundoff, offset) {
     ctx.beginPath();
     ctx.moveTo(x + roundoff + offset, y + offset);
@@ -59,11 +65,11 @@ window.renderStatistics = function (ctx, names, times) {
   };
 
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  drawCloud(100, 10, 420, 270, 30, 10);
+  drawCloud(cloudX, cloudY, widthCloud, heightCloud, roundoffCloud, offsetCloud);
   ctx.fill();
 
   ctx.fillStyle = 'rgba(256, 256, 256, 1.0)';
-  drawCloud(100, 10, 420, 270, 30, 0);
+  drawCloud(cloudX, cloudY, widthCloud, heightCloud, roundoffCloud, 0);
   ctx.fill();
   ctx.strokeStyle = 'blue';
   ctx.lineWidth = 5;
