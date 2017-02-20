@@ -1,9 +1,13 @@
 'use strict';
+var ENTER_KEY_CODE = 13;
+var ESCAPE_KEY_CODE = 27;
 
 var setup = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = setup.querySelector('.setup-close');
+var setupWizardForm = document.querySelector('.setup-wizard-form');
 var userName = setup.querySelector('.setup-user-name');
+var setupButton = setup.querySelector('.setup-submit');
 var wizard = document.querySelector('#wizard');
 var wizardCoat = wizard.querySelector('#wizard-coat');
 var wizardEyes = wizard.querySelector('#wizard-eyes');
@@ -16,7 +20,6 @@ var wizardCoatColor = [
   'rgb(215, 210, 55)',
   'rgb(0, 0, 0)'
 ];
-
 var wizardEyesColor = [
   'black',
   'red',
@@ -24,7 +27,6 @@ var wizardEyesColor = [
   'yellow',
   'green'
 ];
-
 var fireballColor = [
   '#ee4830',
   '#30a8ee',
@@ -32,7 +34,6 @@ var fireballColor = [
   '#e848d5',
   '#e6e848',
 ];
-
 // Валидация формы
 // Функция пока что не реализована
 var validateName = function () {
@@ -43,26 +44,6 @@ var validateName = function () {
     userName.setCustomValidity('');
   }
 };
-
-
-/**
- * Функция удаляет заданный класс в указанном элементе.
- * @param {object} elem элемент дом дерева
- * @param  {string} cls имя класса удаляемого из элемента
- */
-var removeClass = function (elem, cls) {
-  elem.classList.remove(cls);
-};
-
-/**
- * Функция добавляет заданный класс cls в указанном элементе (elem)
- * @param {object} elem элемент дом дерева
- * @param {string} cls имя класса добавляемого в элемента
- */
-var addClass = function (elem, cls) {
-  elem.classList.add(cls);
-};
-
 /**
  * Функция проверяет наличие заданного класса в указанном элементе
  * @param {object} elem элемент дом дерева
@@ -72,22 +53,30 @@ var addClass = function (elem, cls) {
 var checkContains = function (elem, cls) {
   return elem.classList.contains(cls);
 };
-
+var isActivateEvent = function (evt) {
+  return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
+};
+var setupKeydownHandler = function (evt) {
+  if (evt.target !== document.querySelector('input') && evt.keyCode === ESCAPE_KEY_CODE) {
+    setup.classList.add('invisible');
+  }
+};
 /**
  * Функция закрытия профиля при нажатии .setup-close
  */
 var closeProfile = function () {
-  addClass(setup, 'invisible');
+  setup.classList.add('invisible');
+  document.removeEventListener('keydown', setupKeydownHandler);
+  setupOpen.setAttribute('aria-pressed', 'false');
 };
-
-
 /**
  * Функция открытия профиля при нажатии .setup-open
  */
 var openProfile = function () {
-  removeClass(setup, 'invisible');
+  setup.classList.remove('invisible');
+  document.addEventListener('keydown', setupKeydownHandler);
+  setupOpen.setAttribute('aria-pressed', 'true');
 };
-
 /**
  * Функция открытия профиля при нажатии .setup-open
  * Функция закрытия профиля при повторном нажатии .setup-open
@@ -99,7 +88,6 @@ var openCloseProfile = function () {
     openProfile();
   }
 };
-
 /**
  * Функция счетчик
  * @param {object} arr массив вариантов цвета
@@ -108,34 +96,55 @@ var openCloseProfile = function () {
 function makeCounter(arr) {
   var counter = 0;
   return function () {
-    if (counter < arr.length) {
-      return counter++;
+    if (counter < arr.length - 1) {
+      counter++;
     } else {
       counter = 0;
-      return counter;
     }
+    return arr[counter];
   };
 }
-
 /**
- * Функции выбора цвета
- */
+  * Обытие изменение цвета
+  */
 var currentIndexCoatColor = makeCounter(wizardCoatColor);
-function changeWizardCoatColor() {
-  wizardCoat.style.fill = wizardCoatColor[currentIndexCoatColor()];
-}
 var currentIndexEyesColor = makeCounter(wizardEyesColor);
-function changeWizardEyesColor() {
-  wizardEyes.style.fill = wizardEyesColor[currentIndexEyesColor()];
-}
 var currentIndexFireballColor = makeCounter(fireballColor);
-function changeWizardFireballColor() {
-  fireball.style.background = fireballColor[currentIndexFireballColor()];
-}
+setupWizardForm.addEventListener('click', function (evt) {
+  var target = evt.target;
+  while (target !== wizard) {
+    if (target === wizardCoat) {
+      wizardCoat.style.fill = currentIndexCoatColor();
+      return;
+    } else if (target === wizardEyes) {
+      wizardEyes.style.fill = currentIndexEyesColor();
+      return;
+    } else if (target === fireball) {
+      fireball.style.background = currentIndexFireballColor();
+      return;
+    }
+    target = target.parentNode;
+  }
+});
 
 userName.addEventListener('blur', validateName);
 setupOpen.addEventListener('click', openCloseProfile);
 setupClose.addEventListener('click', closeProfile);
-wizardCoat.addEventListener('click', changeWizardCoatColor);
-wizardEyes.addEventListener('click', changeWizardEyesColor);
-fireball.addEventListener('click', changeWizardFireballColor);
+setupOpen.addEventListener('keydown', function (evt) {
+  if (isActivateEvent(evt)) {
+    openCloseProfile();
+  }
+});
+setupClose.addEventListener('keydown', function (evt) {
+  if (isActivateEvent(evt)) {
+    closeProfile();
+  }
+});
+setupButton.addEventListener('click', function () {
+  closeProfile();
+});
+setupButton.addEventListener('keydown', function (evt) {
+  if (isActivateEvent(evt)) {
+    closeProfile();
+  }
+});
