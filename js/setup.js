@@ -5,6 +5,7 @@ var ESCAPE_KEY_CODE = 27;
 var setup = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = setup.querySelector('.setup-close');
+var setupWizardForm = document.querySelector('.setup-wizard-form');
 var userName = setup.querySelector('.setup-user-name');
 var setupButton = setup.querySelector('.setup-submit');
 var wizard = document.querySelector('#wizard');
@@ -109,7 +110,7 @@ function makeCounter(arr) {
 var currentIndexCoatColor = makeCounter(wizardCoatColor);
 var currentIndexEyesColor = makeCounter(wizardEyesColor);
 var currentIndexFireballColor = makeCounter(fireballColor);
-setup.addEventListener('click', function (evt) {
+setupWizardForm.addEventListener('click', function (evt) {
   var target = evt.target;
   while (target !== wizard) {
     if (target === wizardCoat) {
@@ -139,13 +140,11 @@ setupClose.addEventListener('keydown', function (evt) {
     closeProfile();
   }
 });
-setupButton.addEventListener('click', function (evt) {
-  evt.preventDefault();
+setupButton.addEventListener('click', function () {
   closeProfile();
 });
 setupButton.addEventListener('keydown', function (evt) {
   if (isActivateEvent(evt)) {
-    evt.preventDefault();
     closeProfile();
   }
 });
