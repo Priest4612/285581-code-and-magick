@@ -73,7 +73,7 @@ setupClose.addEventListener('keydown', function (evt) {
     closeProfile();
   }
 });
-setupButton.addEventListener('click', function () {
+setupButton.addEventListener('click', function (evt) {
   closeProfile();
 });
 setupButton.addEventListener('keydown', function (evt) {
