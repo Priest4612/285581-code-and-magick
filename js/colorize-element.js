@@ -1,6 +1,8 @@
 'use strict';
-window.colorizeElement = {
-  colorizeRandom: function (element, colors, property) {
+
+window.colorizeElement = (function () {
+
+  var colorizeRandom = function (element, colors, property) {
     var currentColor = colors[0];
     element.addEventListener('click', function () {
       currentColor = window.utils.getRandomElementExcept(currentColor, colors);
@@ -12,8 +14,9 @@ window.colorizeElement = {
         evt.currentTarget.style[property] = currentColor;
       }
     });
-  },
-  colorizeNext: function (element, colors, property) {
+  };
+
+  var colorizeNext = function (element, colors, property) {
     var currentColor;
     currentColor = window.utils.getNextElement(colors);
     element.addEventListener('click', function () {
@@ -24,5 +27,10 @@ window.colorizeElement = {
         evt.currentTarget.style[property] = currentColor();
       }
     });
-  }
-};
+  };
+
+  return {
+    colorizeRandom: colorizeRandom,
+    colorizeNext: colorizeNext
+  };
+})();

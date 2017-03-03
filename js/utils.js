@@ -1,18 +1,19 @@
 'use strict';
-window.utils = {
-  ENTER_KEY_CODE: 13,
-  getRandomElement: function (array) {
+
+window.utils = (function () {
+  var ENTER_KEY_CODE = 13;
+  var getRandomElement = function (array) {
     var randomElementIndex = Math.floor(Math.random() * array.length);
     return array[randomElementIndex];
-  },
-  getRandomElementExcept: function (currentColor, array) {
+  };
+  var getRandomElementExcept = function (currentColor, array) {
     var newColor;
     while (!newColor || newColor === currentColor) {
-      newColor = this.getRandomElement(array);
+      newColor = getRandomElement(array);
     }
     return newColor;
-  },
-  getNextElement: function (array) {
+  };
+  var getNextElement = function (array) {
     var counter = 0;
     return function () {
       if (counter < array.length) {
@@ -22,8 +23,14 @@ window.utils = {
       }
       return array[counter];
     };
-  },
-  isActivateEvent: function (evt) {
-    return evt.keyCode && evt.keyCode === this.ENTER_KEY_CODE;
-  }
-};
+  };
+  var isActivateEvent = function (evt) {
+    return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
+  };
+  return {
+    ENTER_KEY_CODE: ENTER_KEY_CODE,
+    isActivateEvent: isActivateEvent,
+    getRandomElementExcept: getRandomElementExcept,
+    getNextElement: getNextElement
+  };
+})();

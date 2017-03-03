@@ -5,16 +5,21 @@ var setup = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = setup.querySelector('.setup-close');
 var userName = setup.querySelector('.setup-user-name');
-var setupButton = setup.querySelector('.setup-submit');
+var wizardForm = setup.querySelector('.setup-wizard-form');
 
 // Валидация формы
 // Функция пока что не реализована
 var validateName = function () {
   userName.required = true;
-  if (userName.value.length > 50) {
+  if (!userName.value.length) {
+    userName.setCustomValidity('Заполните имя персонажа');
+    return true;
+  } else if (userName.value.length > 50) {
     userName.setCustomValidity('Имя персонажа больше 50 символов');
+    return true;
   } else {
     userName.setCustomValidity('');
+    return false;
   }
 };
 /**
@@ -38,6 +43,7 @@ var setupKeydownHandler = function (evt) {
 var closeProfile = function () {
   setup.classList.add('invisible');
   document.removeEventListener('keydown', setupKeydownHandler);
+  userName.removeEventListener('keyup', validateName);
   setupOpen.setAttribute('aria-pressed', 'false');
 };
 /**
@@ -73,13 +79,24 @@ setupClose.addEventListener('keydown', function (evt) {
     closeProfile();
   }
 });
-setupButton.addEventListener('click', function () {
-  closeProfile();
-});
-setupButton.addEventListener('keydown', function (evt) {
-  if (window.utils.isActivateEvent(evt)) {
+
+wizardForm.addEventListener('submit', function (evt) {
+  if (validateName()) {
+    evt.preventDefault();
+  } else {
     closeProfile();
+    evt.preventDefault();
   }
+  evt.target.addEventListener('keydown', function () {
+    if (window.utils.isActivateEvent(evt)) {
+      if (validateName()) {
+        evt.preventDefault();
+      } else {
+        closeProfile();
+        evt.preventDefault();
+      }
+    }
+  });
 });
 
 var wizardCoat = document.querySelector('#wizard-coat');
