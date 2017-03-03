@@ -2,6 +2,19 @@
 
 window.utils = (function () {
   var ENTER_KEY_CODE = 13;
+  var ESCAPE_KEY_CODE = 27;
+
+  var isKeyboardEvent = function (event) {
+    return typeof event.keyCode !== 'undefined';
+  };
+
+  var isActivateEvent = function (event) {
+    return isKeyboardEvent(event) && event.keyCode === ENTER_KEY_CODE;
+  };
+  var isDeactivateEvent = function (event) {
+    return isKeyboardEvent(event) && event.keyCode === ESCAPE_KEY_CODE;
+  };
+
   var getRandomElement = function (array) {
     var randomElementIndex = Math.floor(Math.random() * array.length);
     return array[randomElementIndex];
@@ -24,12 +37,10 @@ window.utils = (function () {
       return array[counter];
     };
   };
-  var isActivateEvent = function (evt) {
-    return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
-  };
+
   return {
-    ENTER_KEY_CODE: ENTER_KEY_CODE,
     isActivateEvent: isActivateEvent,
+    isDeactivateEvent: isDeactivateEvent,
     getRandomElementExcept: getRandomElementExcept,
     getNextElement: getNextElement
   };
